@@ -1,5 +1,6 @@
 import { SidebarProvider } from '@/components/ui/sidebar'
-import AppSidebar from '@/modules/dashboard/ui/components/app-siderbar'
+import AppSiderbar from '@/modules/dashboard/ui/components/app-siderbar'
+import AppNavbar from '@/modules/dashboard/ui/components/app-navbar'
 
 const Layout = ({
   children,
@@ -8,8 +9,10 @@ const Layout = ({
 }>) => {
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main className="bg-muted flex h-screen w-screen flex-col">{children}</main>
+      <AppSiderbar />
+      <main className="bg-muted flex h-screen w-screen flex-col">
+        <AppNavbar />
+      </main>
     </SidebarProvider>
   )
 }
