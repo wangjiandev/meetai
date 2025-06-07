@@ -40,7 +40,7 @@ const secondSection = [
   },
 ]
 
-const AppSidebar = () => {
+const AppSiderbar = () => {
   const pathname = usePathname()
 
   return (
@@ -102,4 +102,4 @@ const AppSidebar = () => {
   )
 }
 
-export default AppSidebar
+export default AppSiderbar
