@@ -15,6 +15,7 @@ import { AlertCircleIcon, Loader2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { authClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
+import { FaGithub } from 'react-icons/fa'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -48,7 +49,22 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
       {
         onSuccess: () => {
           setPending(false)
-          router.push('/')
+        },
+        onError: ({ error }) => {
+          setPending(false)
+          setError(error.message)
+        },
+      },
+    )
+  }
+
+  const handleSocialLogin = (provider: 'github') => {
+    setPending(true)
+    authClient.signIn.social(
+      { provider },
+      {
+        onSuccess: () => {
+          setPending(false)
         },
         onError: ({ error }) => {
           setPending(false)
@@ -115,8 +131,14 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
                     {pending ? <Loader2 className="size-4 animate-spin" /> : 'Login'}
                   </Button>
                   <Separator className="my-4" />
-                  <Button type="button" variant="outline" className="w-full" disabled={pending}>
-                    Login with Google
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    disabled={pending}
+                    onClick={() => handleSocialLogin('github')}>
+                    <FaGithub className="size-4" />
+                    Login with Github
                   </Button>
                 </div>
               </div>
