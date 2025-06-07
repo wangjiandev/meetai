@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertCircleIcon } from 'lucide-react'
+import { AlertCircleIcon, Loader2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { authClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
@@ -23,6 +23,8 @@ const formSchema = z.object({
 
 function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
   const [error, setError] = useState<string | null>(null)
+  const [pending, setPending] = useState(false)
+
   const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,6 +37,7 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setError(null)
+    setPending(true)
     authClient.signIn.email(
       {
         email: data.email,
@@ -44,9 +47,11 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
       },
       {
         onSuccess: () => {
+          setPending(false)
           router.push('/')
         },
         onError: ({ error }) => {
+          setPending(false)
           setError(error.message)
         },
       },
@@ -101,21 +106,16 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
                       <AlertTitle>{error}</AlertTitle>
                       <AlertDescription>
                         <p>Please verify your billing information and try again.</p>
-                        <ul className="list-inside list-disc text-sm">
-                          <li>Check your card details</li>
-                          <li>Ensure sufficient funds</li>
-                          <li>Verify billing address</li>
-                        </ul>
                       </AlertDescription>
                     </Alert>
                   </div>
                 )}
                 <div className="flex flex-col gap-3">
-                  <Button type="submit" className="w-full">
-                    Login
+                  <Button type="submit" className="w-full" disabled={pending}>
+                    {pending ? <Loader2 className="size-4 animate-spin" /> : 'Login'}
                   </Button>
                   <Separator className="my-4" />
-                  <Button type="button" variant="outline" className="w-full">
+                  <Button type="button" variant="outline" className="w-full" disabled={pending}>
                     Login with Google
                   </Button>
                 </div>
