@@ -105,7 +105,7 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
                       <AlertCircleIcon />
                       <AlertTitle>{error}</AlertTitle>
                       <AlertDescription>
-                        <p>Please verify your billing information and try again.</p>
+                        <p>Please verify your email and password and try again.</p>
                       </AlertDescription>
                     </Alert>
                   </div>
@@ -131,7 +131,7 @@ function SignInView({ className, ...props }: React.ComponentProps<'div'>) {
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a>Privacy Policy</a>
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
       </div>
     </div>
   )
