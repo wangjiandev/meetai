@@ -11,11 +11,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Alert, AlertTitle } from '@/components/ui/alert'
 import { AlertCircleIcon, Loader2 } from 'lucide-react'
-import { Separator } from '@/components/ui/separator'
 import { authClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
+import { FaGithub } from 'react-icons/fa'
+import { Separator } from '@/components/ui/separator'
 
 const formSchema = z
   .object({
@@ -59,6 +60,22 @@ function SignUpView({ className, ...props }: React.ComponentProps<'div'>) {
         onSuccess: () => {
           setPending(false)
           router.push('/')
+        },
+        onError: ({ error }) => {
+          setPending(false)
+          setError(error.message)
+        },
+      },
+    )
+  }
+
+  const handleSocialLogin = (provider: 'github') => {
+    setPending(true)
+    authClient.signIn.social(
+      { provider },
+      {
+        onSuccess: () => {
+          setPending(false)
         },
         onError: ({ error }) => {
           setPending(false)
@@ -151,8 +168,15 @@ function SignUpView({ className, ...props }: React.ComponentProps<'div'>) {
                   <Button type="submit" className="w-full" disabled={pending}>
                     {pending ? <Loader2 className="size-4 animate-spin" /> : 'Create account'}
                   </Button>
-                  <Button variant="outline" className="w-full" disabled={pending}>
-                    Create with Google
+                  <Separator className="my-4" />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    disabled={pending}
+                    onClick={() => handleSocialLogin('github')}>
+                    <FaGithub className="size-4" />
+                    Login with Github
                   </Button>
                 </div>
               </div>
