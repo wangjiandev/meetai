@@ -12,6 +12,7 @@ const Layout = ({
       <AppSiderbar />
       <main className="bg-muted flex h-screen w-screen flex-col">
         <AppNavbar />
+        {children}
       </main>
     </SidebarProvider>
   )
