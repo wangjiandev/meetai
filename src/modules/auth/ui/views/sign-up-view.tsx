@@ -139,6 +139,14 @@ function SignUpView({ className, ...props }: React.ComponentProps<'div'>) {
                     )}
                   />
                 </div>
+                {!!error && (
+                  <div className="grid gap-3">
+                    <Alert variant="destructive">
+                      <AlertCircleIcon />
+                      <AlertTitle>{error}</AlertTitle>
+                    </Alert>
+                  </div>
+                )}
                 <div className="flex flex-col gap-3">
                   <Button type="submit" className="w-full" disabled={pending}>
                     {pending ? <Loader2 className="size-4 animate-spin" /> : 'Create account'}
