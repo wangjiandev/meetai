@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import GeneratorAvatar from '@/components/generator-avatar'
 
 interface AgentFormProps {
   onSuccess?: () => void
@@ -61,6 +62,10 @@ const AgentForm = ({ initialValues, onSuccess, onCancel }: AgentFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="flex items-center gap-x-2">
+          <GeneratorAvatar seed={form.watch('name')} variant="botttsNeutral" className="size-10" />
+          <span className="font-semibold capitalize">{form.watch('name')}</span>
+        </div>
         <FormField
           control={form.control}
           name="name"
