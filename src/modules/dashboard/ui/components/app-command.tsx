@@ -1,7 +1,7 @@
 'use client'
 
 import {
-  CommandDialog,
+  CommandResponsiveDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -19,7 +19,7 @@ interface AppCommandProps {
 
 const AppCommand = ({ open, setOpen }: AppCommandProps) => {
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -56,7 +56,7 @@ const AppCommand = ({ open, setOpen }: AppCommandProps) => {
           </CommandItem>
         </CommandGroup>
       </CommandList>
-    </CommandDialog>
+    </CommandResponsiveDialog>
   )
 }
 
