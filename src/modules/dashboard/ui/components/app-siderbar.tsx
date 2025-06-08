@@ -63,10 +63,10 @@ const AppSiderbar = () => {
                       pathname === item.href &&
                         'bg-sidebar-accent text-sidebar-primary hover:text-sidebar-primary font-bold',
                     )}>
-                    <a href={item.href}>
+                    <Link href={item.href}>
                       <item.icon className="size-4" />
                       <span>{item.label}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
