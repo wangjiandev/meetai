@@ -4,9 +4,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { CornerDownRightIcon, VideoIcon } from 'lucide-react'
 import GeneratorAvatar from '@/components/generator-avatar'
 import { Badge } from '@/components/ui/badge'
-import { AgentGetOne } from '../../types'
+import { AgentsGetMany } from '../../types'
 
-export const columns: ColumnDef<AgentGetOne>[] = [
+export const columns: ColumnDef<AgentsGetMany[number]>[] = [
   {
     accessorKey: 'name',
     header: 'Agent Name',
@@ -31,7 +31,6 @@ export const columns: ColumnDef<AgentGetOne>[] = [
     accessorKey: 'meetingCount',
     header: 'Meetings',
     cell: ({ row }) => {
-      console.log(row.original)
       return (
         <Badge variant="outline" className="flex items-center gap-x-2 [&>svg]:size-4">
           <VideoIcon className="text-blue-700" />

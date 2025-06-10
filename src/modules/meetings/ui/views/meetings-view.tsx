@@ -1,17 +1,26 @@
 'use client'
 
+import { DataTable } from '@/components/data-table'
 import ErrorState from '@/components/error-state'
 import LoadingState from '@/components/loading-state'
 import { useTRPC } from '@/trpc/client'
 import { useQuery } from '@tanstack/react-query'
+import { columns } from '../components/columns'
+import EmptyState from '@/components/empty-state'
 
 export const MeetingsView = () => {
   const trpc = useTRPC()
   const { data } = useQuery(trpc.meetings.getMany.queryOptions({}))
   return (
-    <>
-      <div>{JSON.stringify(data)}</div>
-    </>
+    <div className="flex flex-1 flex-col gap-y-4 p-4 md:px-8">
+      <DataTable data={data?.items ?? []} columns={columns} />
+      {data?.items.length === 0 && (
+        <EmptyState
+          title="Create your first Meeting"
+          description="Create a meeting to start a new conversation. Each meeting can have a different agent and personality."
+        />
+      )}
+    </div>
   )
 }
 
