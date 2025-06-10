@@ -11,8 +11,8 @@ interface CommandSelectProps {
     value: string
     children: ReactNode
   }>
-  onSelect: (value: ReactNode) => void
-  onSearch: (value: string) => void
+  onSelect: (value: string) => void
+  onSearch?: (value: string) => void
   value: string
   placeholder?: string
   isSearchable?: boolean
@@ -24,12 +24,12 @@ const CommandSelect = ({
   onSelect,
   onSearch,
   value,
-  placeholder,
+  placeholder = 'Select an option',
   isSearchable,
   className,
 }: CommandSelectProps) => {
   const [open, setOpen] = useState(false)
-  const selectedOption = options.find((option) => option.id === value)
+  const selectedOption = options.find((option) => option.value === value)
 
   return (
     <>
@@ -43,8 +43,8 @@ const CommandSelect = ({
           <ChevronsUpDownIcon className="size-4" />
         </div>
       </Button>
-      <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search..." />
+      <CommandResponsiveDialog open={open} onOpenChange={setOpen} shouldFilter={!onSearch}>
+        <CommandInput placeholder="Search..." onValueChange={onSearch} />
         <CommandList>
           <CommandEmpty>
             <span className="text-muted-foreground">No options found</span>
