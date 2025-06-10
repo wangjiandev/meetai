@@ -1,0 +1,73 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import ErrorState from '@/components/error-state'
+import LoadingState from '@/components/loading-state'
+import { useTRPC } from '@/trpc/client'
+import { useQueryClient, useSuspenseQuery, useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { useConfirm } from '@/hooks/use-confirm'
+
+import MeetingIdViewHeader from '../components/meeting-id-view-header'
+import UpdateMeetingDialog from '../components/update-meeting-dialog'
+
+interface MeetingIdViewProps {
+  meetingId: string
+}
+
+export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
+  const router = useRouter()
+  const trpc = useTRPC()
+  const { data } = useSuspenseQuery(trpc.meetings.getOne.queryOptions({ id: meetingId }))
+  const queryClient = useQueryClient()
+  const [openUpdateMeetingDialog, setOpenUpdateMeetingDialog] = useState(false)
+
+  const removeMeeting = useMutation(
+    trpc.meetings.remove.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}))
+        router.push('/meetings')
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }),
+  )
+
+  const [ConfirmDialog, confirm] = useConfirm('Remove meeting', 'Are you sure you want to remove this meeting?')
+
+  const handleRemove = async () => {
+    const confirmed = await confirm()
+    if (!confirmed) return
+    removeMeeting.mutateAsync({ id: meetingId })
+  }
+
+  return (
+    <>
+      <ConfirmDialog />
+      <UpdateMeetingDialog
+        open={openUpdateMeetingDialog}
+        onOpenChange={setOpenUpdateMeetingDialog}
+        initialValues={data}
+      />
+      <div className="flex flex-1 flex-col gap-y-4 p-4 md:px-8">
+        <MeetingIdViewHeader
+          meetingId={meetingId}
+          meetingName={data.name}
+          onEdit={() => setOpenUpdateMeetingDialog(true)}
+          onRemove={handleRemove}
+        />
+        {JSON.stringify(data)}
+      </div>
+    </>
+  )
+}
+
+export const MeetingIdViewLoading = () => {
+  return <LoadingState title="Loading meeting" description="Please wait while we load the meeting" />
+}
+
+export const MeetingIdViewError = () => {
+  return <ErrorState title="Error loading meeting" description="Please try again later" />
+}
