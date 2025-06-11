@@ -21,5 +21,5 @@ export const generateAvatarUri = ({ seed, variant }: AvatarProps) => {
     })
   }
 
-  return avatar?.toDataUri()
+  return avatar?.toDataUri()!
 }
