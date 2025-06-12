@@ -29,9 +29,9 @@ Example:
 - Feature X automatically does Y
 - Mention of integration with Z`.trim(),
   model: openai({
-    model: 'gpt-4o',
-    apiKey: process.env.OPEN_AI_KEY!,
-    baseUrl: 'https://api.openai.com/v1/',
+    model: 'deepseek-chat',
+    apiKey: process.env.DEEPSEEK_API_KEY!,
+    baseUrl: 'https://api.deepseek.com/v1',
   }),
 })
 
@@ -92,14 +92,19 @@ export const meetingProcessing = inngest.createFunction(
     const { output } = await summarizer.run(
       'Summarize the following transcript: ' + JSON.stringify(transcriptWithSpeaker),
     )
-    await step.run('save-summary', async () => {
-      return db
-        .update(meetings)
-        .set({
-          summary: (output[0] as TextMessage).content as string,
-          status: 'completed',
-        })
-        .where(eq(meetings.id, event.data.meetingId))
-    })
+
+    console.log('output: ', output)
+
+    if ((output[0] as TextMessage).content) {
+      await step.run('save-summary', async () => {
+        return db
+          .update(meetings)
+          .set({
+            summary: (output[0] as TextMessage).content as string,
+            status: 'completed',
+          })
+          .where(eq(meetings.id, event.data.meetingId))
+      })
+    }
   },
 )
