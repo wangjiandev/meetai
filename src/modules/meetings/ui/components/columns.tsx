@@ -1,8 +1,6 @@
 'use client'
 
 import { format } from 'date-fns'
-import humanizeDuration from 'humanize-duration'
-
 import { ColumnDef } from '@tanstack/react-table'
 import {
   CornerDownRightIcon,
@@ -14,17 +12,9 @@ import {
 } from 'lucide-react'
 import GeneratorAvatar from '@/components/generator-avatar'
 import { Badge } from '@/components/ui/badge'
-import { MeetingsGetMany } from '../../types'
-import { cn } from '@/lib/utils'
+import { cn, formatDuration } from '@/lib/utils'
 
-function formatDuration(duration: number) {
-  return humanizeDuration(duration * 1000, {
-    language: 'en',
-    largest: 1,
-    round: true,
-    units: ['d', 'h', 'm', 's'],
-  })
-}
+import { MeetingsGetMany } from '../../types'
 
 const statusIconMap = {
   upcoming: ClockFadingIcon,
